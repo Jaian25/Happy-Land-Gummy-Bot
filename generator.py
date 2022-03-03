@@ -4,6 +4,7 @@ from back import get_traits
 import threading
 import random
 from valentine_gen import generate_valentine
+from peace_gen import generate_peace
 # Opening the primary image (used in background)
 #img1 = Image.open(r"gunmetal.png")
   
@@ -166,3 +167,17 @@ def valentine_suit(token):
     imgFor = generate_valentine(token , ['Background Color' , 'Arms' , 'Body'  , 'Rare' , 'Legs'] )
     #img = img.resize((1000 , 1000))
     return imgFor
+
+def peace_suit(token):
+    imgFor = generate_peace(token , ['Background Color' , 'Arms' , 'Body'  , 'Rare' , 'Legs'] )
+    #img = img.resize((1000 , 1000))
+    return imgFor
+def peace_back(img):
+    imgback = Image.open(f'./Layers/peace/peacebg.png')
+    img = overlap(imgback , img)
+    return img
+def peace_combo(token):
+    imgfor = peace_suit(token)
+    imgback =  Image.open(f'./Layers/peace/peacebg.png')
+    img = overlap(imgback , imgfor)
+    return img

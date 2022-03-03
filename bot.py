@@ -9,13 +9,13 @@ from PIL import Image
 import discord
 bot = commands.Bot(command_prefix='!')
 
-fun_layers = ['valentine','removebg','monsterlab','suit','be_my' , 'no_bg']
+fun_layers = ['valentine','removebg','monsterlab','suit','be_my' , 'no_bg' , 'peace_suit' , 'peacebg' , 'peace']
 
-items = ['suit']
+items = ['suit' , 'peace_suit']
 
-backgrounds = ['monsterlab','be_my']
+backgrounds = ['monsterlab','be_my' , 'peacebg']
 
-utils = ['valentine','removebg']
+utils = ['valentine','removebg' ,'peace']
 
 @bot.event
 async def on_ready():
@@ -32,15 +32,18 @@ Available Accessories :
 
 Type 1: Items
 - suit - Bears come up with four possible suit items with flowers in hands
+- peace_suit - Bears come up with two possible peace loving suit 
 
 Type 2: Backgrounds
 - monsterlab - CML x HLGB collab
 - be_my - Be my valentine background
+- peacebg - Love peace not war background
 
 Type 3: Utility
 
 -removebg : Removes background
 -valentine : 4 valentines outfits & background 
+-peace : 2 Peace outfits & background
 
 Example - !call 1234 suit+monsterlab     --> valentines with CML x HLGBcollab
 ```''' 
@@ -105,6 +108,13 @@ async def call(ctx, token , layers=''):
                 img.save(f'./temp/{token}-{layers}-temp.png', quality = 50)
                 file = discord.File(f'./temp/{token}-{layers}-temp.png')
                 await ctx.send(file = file)
+            elif layer == 'peace':
+                await ctx.send("Love Peace X Not War")
+                img = peace_combo(str(token))
+                img = img.resize((1000 , 1000))
+                img.save(f'./temp/{token}-{layers}-temp.png', quality = 50)
+                file = discord.File(f'./temp/{token}-{layers}-temp.png')
+                await ctx.send(file = file)
             else:
                 raiseExceptions()
             return
@@ -113,6 +123,13 @@ async def call(ctx, token , layers=''):
         for i in first:
             if i == 'suit':
                 img = valentine_suit(str(token))
+                if image_flag == 0 : 
+                    image_flag = 1
+                    img1 = img
+                else:
+                    img1 = overlap(img1 ,img)
+            if i == 'peace_suit':
+                img = peace_suit(str(token))
                 if image_flag == 0 : 
                     image_flag = 1
                     img1 = img
@@ -127,6 +144,8 @@ async def call(ctx, token , layers=''):
                 img1 = monsterlab(img1)
             if i == 'be_my':
                 img1 = will_u_be(img1)
+            if i == 'peacebg':
+                img1 = peace_back(img1)
         if b == 0:
             img1 = normal_background(img1 , token)
         
